@@ -72,6 +72,13 @@ async function copyTemplate(src, dest) {
 	const spinner = ora(`正在创建项目...`).start();
 	try {
 		await copy(src, dest);
+
+		const gitignoreSrc = join(dest, "_gitignore");
+		const gitignoreDest = join(dest, ".gitignore");
+		if (fsExtra.existsSync(gitignoreSrc)) {
+			await fsExtra.rename(gitignoreSrc, gitignoreDest);
+		}
+
 		spinner.succeed("项目创建成功");
 	} catch (err) {
 		spinner.fail("项目创建失败");
